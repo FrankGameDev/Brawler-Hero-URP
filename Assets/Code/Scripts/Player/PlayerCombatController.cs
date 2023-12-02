@@ -221,19 +221,19 @@ public class PlayerCombatController : MonoBehaviour
 
     IEnumerator DisableLocomotionWithTimer(float seconds = 1f)
     {
-        InputManager.Instance.DisableLocomotion();
+        InputManager.Instance.DisableGameplayInputs();
         yield return new WaitForSeconds(seconds);
-        InputManager.Instance.EnableLocomotion();
+        InputManager.Instance.EnableGameplayInputs();
     }
 
     IEnumerator DisableCombatWithTimer(float seconds)
     {
         isAttacking = true;
-        InputManager.Instance.DisableCombat();
+        InputManager.Instance.DisableGameplayInputs();
 
         yield return new WaitForSeconds(seconds);
-
-        InputManager.Instance.EnableCombat();
+        
+        InputManager.Instance.EnableGameplayInputs();
         //TODO: Wait affinchè l'animazione non termina
         animationController.FadeToAnim(AnimationNames.COMBAT_IDLE, fadeToCombatIdleTime);
         isAttacking = false;

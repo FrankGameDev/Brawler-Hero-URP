@@ -185,18 +185,18 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private IEnumerator DisableLocomotionWithTimerCoroutine(float seconds = 1f)
     {
-        InputManager.Instance.DisableLocomotion();
+        InputManager.Instance.DisableGameplayInputs();
         yield return new WaitForSeconds(seconds);
-        InputManager.Instance.EnableLocomotion();
+        InputManager.Instance.EnableGameplayInputs();
     }
 
     private IEnumerator DisableCombatWithTimerCoroutine(float seconds, float fadeToCombatIdleTime)
     {
-        InputManager.Instance.DisableCombat();
+        InputManager.Instance.DisableGameplayInputs();
 
         yield return new WaitForSeconds(seconds);
 
-        InputManager.Instance.EnableCombat();
+        InputManager.Instance.EnableGameplayInputs();
         //TODO: Wait affinchè l'animazione non termina
         yield return new WaitUntil(() => !animationController.AnimatorIsPlaying());
         animationController.FadeToAnim(AnimationNames.COMBAT_IDLE, fadeToCombatIdleTime);

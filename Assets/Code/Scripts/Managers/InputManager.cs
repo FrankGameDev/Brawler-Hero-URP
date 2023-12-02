@@ -41,15 +41,15 @@ public class InputManager : MonoBehaviour
         _input = new PlayerInput();
 
         // ==== Locomotion
-        _input.Locomotion.Movement.canceled += Movement_canceled;
+        _input.Gameplay.Movement.canceled += Movement_canceled;
 
-        _input.Locomotion.SpeedUp.performed += OnSpeeding;
+        _input.Gameplay.SpeedUp.performed += OnSpeeding;
 
-        _input.Locomotion.Jump.performed += OnJumping;
-        _input.Locomotion.Jump.canceled += OnJumping;
+        _input.Gameplay.Jump.performed += OnJumping;
+        _input.Gameplay.Jump.canceled += OnJumping;
 
-        _input.Locomotion.StartFlying.performed += OnStartFlying;
-        _input.Locomotion.StartFlying.canceled += OnStartFlying;
+        _input.Gameplay.StartFlying.performed += OnStartFlying;
+        _input.Gameplay.StartFlying.canceled += OnStartFlying;
 
         // ==== Flying
         _input.Flying.FlyUp.performed += FlyUp_performed;
@@ -60,8 +60,8 @@ public class InputManager : MonoBehaviour
 
 
         // ==== Combat
-        _input.SpecialCombat.ChargedAttack.performed += context => isChargingAttack = true;
-        _input.SpecialCombat.ChargedAttack.canceled += context => isChargingAttack = false;
+        _input.Gameplay.ChargedAttack.performed += context => isChargingAttack = true;
+        _input.Gameplay.ChargedAttack.canceled += context => isChargingAttack = false;
     }
 
 
@@ -88,9 +88,9 @@ public class InputManager : MonoBehaviour
         IsSpeeding = false;
     }
 
-    public Vector2 GetPlayerMovement() => _input.Locomotion.Movement.ReadValue<Vector2>();
+    public Vector2 GetPlayerMovement() => _input.Gameplay.Movement.ReadValue<Vector2>();
 
-    public bool StopFlying => _input.Locomotion.StopFlying.triggered;
+    public bool StopFlying => _input.Gameplay.StopFlying.triggered;
 
 
     #endregion
@@ -112,12 +112,12 @@ public class InputManager : MonoBehaviour
     #region Combat
 
 
-    public bool IsDodging() => _input.Combat.Dodge.WasPressedThisFrame();
+    public bool IsDodging() => _input.Gameplay.Dodge.WasPressedThisFrame();
 
 
-    public bool IsAttacking() => _input.Combat.Lightattack.triggered;
+    public bool IsAttacking() => _input.Gameplay.Lightattack.triggered;
 
-    public bool IsGrabbing() => _input.Combat.Grab.triggered;
+    public bool IsGrabbing() => _input.Gameplay.Grab.triggered;
 
     public bool IsChargingAttack() => isChargingAttack;
 
@@ -130,19 +130,16 @@ public class InputManager : MonoBehaviour
 
     #region Camera
 
-    public Vector2 GetLook() => _input.Camera.LookAround.ReadValue<Vector2>();
+    public Vector2 GetLook() => _input.Gameplay.LookAround.ReadValue<Vector2>();
 
     #endregion
 
 
 
-    public void EnableAll() => _input.Enable();
-    public void DisableAll() => _input.Disable();
-    public void EnableLocomotion() => _input.Locomotion.Enable();
-    public void DisableLocomotion() => _input.Locomotion.Disable();
-
-    public void EnableCombat() => _input.Combat.Enable();
-    public void DisableCombat() => _input.Combat.Disable();
+    private void EnableAll() => _input.Enable();
+    private void DisableAll() => _input.Disable();
+    public void EnableGameplayInputs() => _input.Gameplay.Enable();
+    public void DisableGameplayInputs() => _input.Gameplay.Disable();
 
     private void OnEnable()
     {
