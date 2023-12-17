@@ -101,7 +101,7 @@ public class SwatBehaviour : MonoBehaviour, IDamageable, IGrabbable
 
     public void TakeDamageAnimation()
     {
-        _animator.SetTrigger(takeDamageHash);
+        _animator?.SetTrigger(takeDamageHash);
     }
 
     #region Interfaces

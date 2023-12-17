@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="Player Combat Stats", menuName = "My Object/Player Combat Stats")]
+[CreateAssetMenu(fileName ="Player Combat Stats", menuName = "Player/Player Combat Stats")]
 public class PlayerCombatStats : ScriptableObject
 {
     [Header("Light attack parameters")]

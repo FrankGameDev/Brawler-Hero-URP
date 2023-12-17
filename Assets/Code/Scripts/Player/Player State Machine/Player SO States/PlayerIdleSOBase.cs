@@ -28,9 +28,9 @@ public class PlayerIdleSOBase : PlayerGroundedSOBase
         {
             player.stateMachine.ChangeState(player.playerCombatState);
         }
-        else if (player.InputDirection != Vector3.zero)
-            player.stateMachine.ChangeState(player.playerMovingState);
         else if (player.Input.IsJumping)
             player.stateMachine.ChangeState(player.playerJumpingState);
+        else if (player.InputDirection != Vector3.zero)
+            player.stateMachine.ChangeState(player.playerMovingState);
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Player States/Jumping State", fileName = "PlayerJumpingSO")]
@@ -8,6 +9,7 @@ public class PlayerJumpingSOBase : PlayerGroundedSOBase
     [SerializeField, Range(0f, 10f)] private float airDrag;
     [SerializeField] private float mass;
     private float startDrag, startMass;
+    [SerializeField] private float fallMultiplier;
 
 
     public override void DoEnterLogic()
@@ -17,10 +19,10 @@ public class PlayerJumpingSOBase : PlayerGroundedSOBase
         player.animationController.PlayAnimation(AnimationNames.JUMP);
 
         //Rigidbody settings
-        startMass = player.rb.mass;
-        startDrag = player.rb.drag;
-        player.rb.mass = mass;
-        player.rb.drag = airDrag;
+        //startMass = player.rb.mass;
+        //startDrag = player.rb.drag;
+        //player.rb.mass = mass;
+        //player.rb.drag = airDrag;
     }
 
     public override void DoUpdateLogic()
@@ -37,12 +39,11 @@ public class PlayerJumpingSOBase : PlayerGroundedSOBase
     public override void DoExitLogic()
     {
         base.DoExitLogic();
-        player.animationController.FadeToAnim(AnimationNames.GROUNDED_LOCOMOTION,.5f);
+        player.animationController.FadeToAnim(AnimationNames.GROUNDED_LOCOMOTION, .5f);
     }
 
     public override void HandleChangeState()
     {
-
         if (player.Input.IsAttacking())
         {
             player.stateMachine.ChangeState(player.playerCombatState);
