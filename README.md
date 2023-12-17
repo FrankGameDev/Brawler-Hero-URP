@@ -1,6 +1,6 @@
 # Brawler Hero URP
 > [!WARNING]
-> This is a WIP! Final result may vary
+> This is a WIP! The final result may vary
  
 _Brawler Hero_ wants to be a beat'em up game, with a simple but captivating combat system. It takes inspiration from the series of games Batman Arkham's freeflow combat style
 
