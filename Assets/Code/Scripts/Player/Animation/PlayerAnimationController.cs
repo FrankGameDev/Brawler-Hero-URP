@@ -6,29 +6,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public static class AnimationNames
-{
-    #region Locomotion
-
-    public static readonly string GROUNDED_LOCOMOTION = "Grounded Locomotion";
-    public static readonly string JUMP = "Jumping up";
-    public static readonly string FALLING_POSE = "Falling pose";
-    public static readonly string LANDING = "Land2";
-
-    #endregion 
-
-    #region Combat 
-
-    public static readonly string COMBAT_IDLE = "Combat idle";
-    public static readonly string HOOK_PUNCH_RX = "Hook punch Rx";
-    public static readonly string HOOK_PUNCH_LX = "Hook punch Lx";
-    public static readonly string HEAD_BUTT = "Head butt";
-    public static readonly string KICK = "Kick";
-    public static readonly string MARTELO_KICK = "Martelo Kick";
-    public static readonly string DROP_KICK = "Drop kick";
-
-    #endregion
-}
 
 public class PlayerAnimationController : MonoBehaviour
 {
@@ -94,14 +71,18 @@ public class PlayerAnimationController : MonoBehaviour
     {
         if (_currentAnimation == animName) return;
 
-        if (_animationHashes.TryGetValue(animName, out int hash))
+        try
         {
-            animator.Play(hash);
-            _currentAnimation = animName;
+            if (_animationHashes.TryGetValue(animName, out int hash))
+            {
+                animator.Play(hash);
+                _currentAnimation = animName;
+            }
         }
-        else
+        catch
+        {
             Debug.LogError($"Animation {animName} doesn't exist");
-
+        }
     }
 
     /// <summary>
@@ -128,7 +109,7 @@ public class PlayerAnimationController : MonoBehaviour
     #region Animation times
 
     public float GetAnimationLength() => animator.GetCurrentAnimatorStateInfo(0).length;
-    public bool AnimatorIsPlaying() =>  animator.GetCurrentAnimatorStateInfo(0).normalizedTime < GetAnimationLength();
+    public bool AnimatorIsPlaying() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime < GetAnimationLength();
     public async Task WaitForAnimationToFinish()
     {
         while (AnimatorIsPlaying())

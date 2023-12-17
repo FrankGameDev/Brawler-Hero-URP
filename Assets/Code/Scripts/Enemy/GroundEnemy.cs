@@ -10,7 +10,7 @@ using UnityEngine.AI;
  * It determines its movement and its behaviour against the player
  */
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NavMeshAgent))]
-public abstract class GroundEnemy : MonoBehaviour, IGrabbable, IDamageable
+public class GroundEnemy : MonoBehaviour, IGrabbable, IDamageable
 {
 
     [Header("Ground Enemy Settings")]

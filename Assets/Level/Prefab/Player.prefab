@@ -2241,11 +2241,10 @@ GameObject:
   - component: {fileID: 1334717344867353126}
   - component: {fileID: 5227344716542786960}
   - component: {fileID: 3342809330753141412}
-  - component: {fileID: 4444105766839495388}
   - component: {fileID: 5913132339279790507}
   - component: {fileID: 1013124633981762998}
   - component: {fileID: 7293570820758714119}
-  - component: {fileID: 740885444597183643}
+  - component: {fileID: 7945944563409984210}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -2384,30 +2383,6 @@ MonoBehaviour:
   movementDisabled: 0
   canDodge: 1
   onAttackHitEvent: {fileID: 11400000, guid: 7f36e7b0dd004ae4bbd688a0b21b1447, type: 2}
---- !u!114 &4444105766839495388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7231882823863847094}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d4b35673b1af2246a59b898252f452a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerArmature: {fileID: 5921650076520752677}
-  playerCombatStats: {fileID: 11400000, guid: 3869a747435cff74b956f1ba7de3359e, type: 2}
-  enemyFinderRadius: 5
-  attackPoint: {fileID: 6493065779432124367}
-  attackAndGrabHitDetectionRadius: 2
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  grabAndDropEvent: {fileID: 11400000, guid: 3f7f0cfe5ca326d4ba8c6e2b2db82e86, type: 2}
-  throwEvent: {fileID: 11400000, guid: cb2829e7f06c6cf4dbdec1647024f844, type: 2}
-  onAttackHitEvent: {fileID: 11400000, guid: 7f36e7b0dd004ae4bbd688a0b21b1447, type: 2}
-  fadeToCombatIdleTime: 0
 --- !u!114 &5913132339279790507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2415,7 +2390,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7231882823863847094}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffe1e97f3bb9b9b4ca51e5d7a3e31022, type: 3}
   m_Name: 
@@ -2462,23 +2437,89 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebf99f24073109a478df0d3f56481b86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &740885444597183643
+--- !u!114 &7945944563409984210
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7231882823863847094}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6ba99d7861628740a269e7cda7a4ec0, type: 3}
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsSpeeding: 0
-  IsJumping: 0
-  StartFlying: 0
-  IsFlyingUp: 0
-  IsFlyingDown: 0
+  m_Actions: {fileID: -944628639613478452, guid: cddc9d2379d65674ab0647e7d2bd1079,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 413210dc-319b-48a0-b9bf-1cff1fdc96cf
+    m_ActionName: Gameplay/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a4dff2a3-fd00-40ec-99a6-8c4576e1b0a0
+    m_ActionName: Gameplay/Charged Attack[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a38e253e-c6ed-4d5f-8743-5887fcc77368
+    m_ActionName: Gameplay/Grab[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b1a89e33-c8e7-4af0-96c4-0116c145ac38
+    m_ActionName: Gameplay/Light attack[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 36891593-b3cd-4c7e-b48d-1e18121d8487
+    m_ActionName: Gameplay/Dodge[/Keyboard/ctrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dacb9ce1-49e4-43a4-8150-91e0470ecfb9
+    m_ActionName: Gameplay/Lock On
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e5b688d4-b23e-4dc9-a236-0a3b487638ec
+    m_ActionName: Gameplay/LookAround[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 16abf3a2-5119-4ed7-bd59-e1c9fdb58a1c
+    m_ActionName: Gameplay/SpeedUp[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5872a303-6ab0-4b90-ac5e-f40a41e954a9
+    m_ActionName: Gameplay/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b849d9a4-2a6b-4cff-bca8-c10c2f3bff8b
+    m_ActionName: Gameplay/StartFlying[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1471f6c6-bed3-44de-a609-a4a8eafc862f
+    m_ActionName: Gameplay/StopFlying[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 89f6fd37-875b-4b99-a6af-f108107bdec2
+    m_ActionName: Flying/FlyUp
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d9139fc1-af1f-4101-97b4-b603cc5aa433
+    m_ActionName: Flying/FlyDown
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Gameplay
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &7235441315763385302
 GameObject:
   m_ObjectHideFlags: 0

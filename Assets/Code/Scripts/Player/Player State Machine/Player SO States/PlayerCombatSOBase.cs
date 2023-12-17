@@ -1,4 +1,5 @@
 using DG.Tweening;
+using MoreMountains.Feedbacks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
     PlayerGrabController _playerGrabController;
 
     [Header("State logic fields"), SerializeField]
-    private float combatToIdleTimer = 1.5f;
+    private float fromCombatStateToIdleStateTimer = 1.5f;
     private float maxCombatToIdleTimer;
 
     [Header("Combat logic parameters")]
@@ -34,20 +35,15 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
     #region Animation fields
 
     [Header("Animations")]
-    public int fadeToCombatIdleTime;
-
-    #endregion
+    public float fadeToCombatIdleAnimationTime = .5f;
+    [Tooltip("Define the attack combo animation. The attack will be executed based on the list order")]
+    public List< AttackSO> _attackCombo;
 
     // == Combo
     int _attackComboIndex = 0;
-    Dictionary<int, string> _attackComboAnimationOrder = new Dictionary<int, string>
-        {
-            { 0, AnimationNames.HOOK_PUNCH_RX },
-            { 1, AnimationNames.MARTELO_KICK },
-            { 2, AnimationNames.HEAD_BUTT },
-            { 3, AnimationNames.HOOK_PUNCH_LX },
-            { 4, AnimationNames.KICK }
-        };
+
+    #endregion
+
 
     // === Utility
     public bool isAttacking { get; private set; }
@@ -57,13 +53,11 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
 
     #region State machine logic
 
-
-
     public override void DoEnterLogic()
     {
         base.DoEnterLogic();
 
-        maxCombatToIdleTimer = combatToIdleTimer;
+        maxCombatToIdleTimer = fromCombatStateToIdleStateTimer;
         player.rb.velocity = Vector3.zero;
         FreeFlowAttack();
     }
@@ -72,7 +66,7 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
     {
         base.DoUpdateLogic();
 
-        Movement();
+        //Movement();
         if (InputManager.Instance.IsAttacking())
             FreeFlowAttack();
 
@@ -81,18 +75,20 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
     public override void DoExitLogic()
     {
         base.DoExitLogic();
+        _attackComboIndex = 0;
+        player.animationController.FadeToAnim(AnimationNames.GROUNDED_LOCOMOTION, .5f); 
     }
 
     public override void HandleChangeState()
     {
-        if ((combatToIdleTimer -= Time.deltaTime) < 0)
+        if ((fromCombatStateToIdleStateTimer -= Time.deltaTime) < 0)
             //|| player.Input.IsSpeeding)
             player.stateMachine.ChangeState(player.playerIdleState);
     }
 
     public override void ResetValues()
     {
-        combatToIdleTimer = maxCombatToIdleTimer;
+        fromCombatStateToIdleStateTimer = maxCombatToIdleTimer;
     }
 
 
@@ -136,7 +132,7 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
 
     #region Long distance attack
 
-    async void HandleLongDistanceAttack()
+    void HandleLongDistanceAttack()
     {
         ResetAttackState((int)playerCombatStats.attackCooldown);
         MoveTowardsEnemy(_lastEnemyTarget, 1f);
@@ -144,21 +140,24 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
         player.DisableLocomotionWithTimer(player.disableLocomotionWhenAttackingTimer);
         player.DisableCombatWithTimer(playerCombatStats.attackCooldown, .25f);
 
-        await GoToCombatIdle();
+        //await GoToCombatIdle();
     }
 
     void MoveTowardsEnemy(Collider enemyCollider, float movementSpeed = .5f)
     {
-        Vector3 enemyPos = TargetOffset(enemyCollider);
+        Vector3 enemyPos = TargetOffset(enemyCollider, 2.5f);
         transform.DOMoveZ(enemyPos.z, movementSpeed);
         transform.DOMoveX(enemyPos.x, movementSpeed);
-        player.playerArmature.LookAt(enemyCollider.transform);
+        Vector3 lookAtPos = new(enemyCollider.transform.position.x, player.playerArmature.position.y, enemyCollider.transform.position.z);
+        player.playerArmature.DOLookAt(lookAtPos, .5f);
     }
 
-    private Vector3 TargetOffset(Collider target)
+    private Vector3 TargetOffset(Collider target, float offset = 1f)
     {
         Vector3 center = target.bounds.center;
-        return Vector3.MoveTowards(center, transform.position, .8f);
+        Vector3 desiredPosition = Vector3.MoveTowards(center, transform.position, .8f);
+        Vector3 offsetVector = (desiredPosition - center).normalized * offset;
+        return center + offsetVector;
     }
 
 
@@ -173,22 +172,22 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
         AttackComboLogic();
     }
 
-    async void AttackComboLogic()
+    void AttackComboLogic()
     {
         ResetAttackState((int)playerCombatStats.attackCooldown);
         //Disable player inputs
         player.DisableCombatWithTimer(playerCombatStats.attackCooldown, .25f);
         player.DisableLocomotionWithTimer(player.disableLocomotionWhenAttackingTimer);
 
-        player.animationController.PlayAnimation(_attackComboAnimationOrder[_attackComboIndex]);
+        player.animationController.PlayAnimation(_attackCombo[_attackComboIndex].AnimationName);
         HandleComboIndex();
-        await GoToCombatIdle();
+        //await GoToCombatIdle();
     }
 
 
     void HandleComboIndex()
     {
-        if (_attackComboIndex == _attackComboAnimationOrder.Count - 1)
+        if (_attackComboIndex == _attackCombo.Count - 1)
             _attackComboIndex = 0;
         else _attackComboIndex += 1;
     }
@@ -202,8 +201,9 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
     {
         await player.animationController.WaitForAnimationToFinish();
         await Task.Delay(1 * 1000);
-        player.animationController.FadeToAnim(AnimationNames.COMBAT_IDLE, fadeToCombatIdleTime);
+            player.animationController.FadeToAnim(AnimationNames.COMBAT_IDLE, fadeToCombatIdleAnimationTime);
     }
+
 
     #endregion
 
@@ -269,13 +269,3 @@ public class PlayerCombatSOBase : PlayerGroundedSOBase
     #endregion
 }
 
-enum AttackType
-{
-    LONG_DISTANCE,
-    LIGHT
-}
-
-enum LightAttackType
-{
-    KICK, PUNCH, HEAD
-}
